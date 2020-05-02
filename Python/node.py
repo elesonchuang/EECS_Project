@@ -35,3 +35,9 @@ class Node:
                 return True
         return False
 
+
+if __name__ == '__main__':
+    Dao = Node(0)
+    Dao.setSuccessor(1,2,2)
+    print(Dao.getSuccessors())
+
