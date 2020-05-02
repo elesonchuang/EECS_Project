@@ -17,18 +17,27 @@ class Action(IntEnum):
 class Maze:
     def __init__(self, filepath):
         # TODO : read file and implement a data structure you like
-
         self.raw_data = pandas.read_csv(filepath).values
         self.nodes = list(self.raw_data[:,0])
         for i in range(len(self.nodes)):
             self.nodes[i]=int(self.nodes[i])
-        self.nd_dict = dict(zip(self.nodes,list(self.raw_data[:,1:5])))  # key: index, value: the correspond node
+        self.nd_dict = dict(zip(self.nodes,list(Node(i) for i in self.nodes)))  # key: index, value: the correspond node
+        self.passed=[]
+
+        for index,node in self.nd_dict.items():
+            for i in range(1,5):
+                try:
+                    a=int(self.raw_data[index-1][i])
+                    node.setSuccessor(a,i,int(self.raw_data[index-1][i+4]))
+                except:
+                    pass
         self.adj=dict()
+
         for k,v in self.nd_dict.items():
-            non_nan=[]
-            for i in v:
-                if str(i) != 'nan':non_nan.append(int(i))
-            self.adj[int(k)]=non_nan
+            buffer=[]
+            for i in v.getSuccessors():
+                buffer.append(i[0])
+            self.adj[k]=buffer
 
     def getStartPoint(self):
         if (len(self.nd_dict) < 2):
@@ -68,12 +77,17 @@ class Maze:
                 i=marked[i]
             way.append(i)
             ways[deadend]=way[::-1]
-        #find the nearest way    
-        a=80 # some large number
+        #find the nearest unexplored way  
+        self.passed.append(nd)  
+        a=80 # some large 
+        min_way=None
+        destination=0
         for key,val in ways.items():
-            if a>len(val) and len(val)!=1:
+            if a>len(val) and len(val)!=1 and key not in self.passed:
                 a=len(val)
                 min_way=val
+                destination=key
+        self.passed.append(destination)
         return min_way
 
     def BFS_2(self, nd_from, nd_to):
@@ -113,8 +127,14 @@ class Maze:
 
 if __name__ == '__main__':
     MZ=Maze("data/small_maze.csv")
-    #print(MZ.raw_data[:,1:5])
+    #print(MZ.getStartPoint())
+    #print(int(MZ.raw_data[0][1]))
     #print(str(np.array(MZ.raw_data)[1][2])=='nan')
     #print(MZ.nodes)
-    print(MZ.BFS_2(5,2))
+    node=2
+    route=MZ.BFS(node)
+    while route:
+        print(route)
+        node=route[-1]
+        route=MZ.BFS(node)
     #print(MZ.getStartPoint())
