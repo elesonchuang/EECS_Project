@@ -5,7 +5,7 @@ class Direction(IntEnum):
     SOUTH = 2
     WEST  = 3
     EAST  = 4
-
+globals().update(Direction.__members__)
 # Successor : (Node, direction to node, distance)
 class Node:
     def __init__(self, index=0):
@@ -26,8 +26,9 @@ class Node:
 
 
     def getDirection(self, nd):
-        # TODO : Return the direction of nd from the present node if nd is adjacent to the present node.
-        return
+        #Return the direction of nd from the present node if nd is adjacent to the present node.
+        for successor in self.Successors:
+            if successor[0]==nd:return successor[1]
 
     def isSuccessor(self, nd):
         for succ in self.Successors:
@@ -35,9 +36,16 @@ class Node:
                 return True
         return False
 
+<<<<<<< HEAD
 
 if __name__ == '__main__':
     Dao = Node(0)
     Dao.setSuccessor(1,2,2)
     print(Dao.getSuccessors())
 
+=======
+if  __name__ == "__main__":
+    a=Node(1)
+    a.setSuccessor(2,2,2)
+    print(int(a.getDirection(2)))
+>>>>>>> 57ab082ad5c0ef1d3ae3d06dcb814765252b635f
