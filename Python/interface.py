@@ -29,3 +29,8 @@ class interface:
     def end_process(self):
         self.ser.SerialWrite('e')
         self.ser.disconnect()
+
+
+if __name__ == '__main__':
+    test = interface()
+    print(test.end_process)

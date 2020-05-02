@@ -31,6 +31,7 @@ def main():
     elif (sys.argv[1] == '2'):
         print("Mode 2: Self-testing mode.")
         # TODO: You can write your code to test specific function.
+        interf.send_action(ADVANCE)
 
 
 if __name__ == '__main__':
