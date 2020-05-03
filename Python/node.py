@@ -28,8 +28,9 @@ class Node:
 
     def getDirection(self, nd):
         #Return the direction of nd from the present node if nd is adjacent to the present node.
+        #nd: a Node class item
         for successor in self.Successors:
-            if successor[0]==nd:return successor[1]
+            if successor[0]==nd.index:return successor[1]
 
     def isSuccessor(self, nd):
         for succ in self.Successors:
@@ -40,4 +41,4 @@ class Node:
 if  __name__ == "__main__":
     a=Node(1)
     a.setSuccessor(2,2,2)
-    print(int(a.getDirection(2)))
+    print(a.getDirection(2)-1)

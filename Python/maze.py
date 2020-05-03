@@ -46,7 +46,17 @@ class Maze:
         return self.nd_dict[1]
 
     def getNodeDict(self):
+        '''
+        return the node dictionary.
+        the keys are ints represent the indexes of nodes, while values are the items in the Node class which indexes match the keys above.
+        '''
         return self.nd_dict
+
+    def node(self,index):
+        '''
+        return the item in class Node that matches the index(An int).
+        '''
+        return self.getNodeDict()[index]
 
     def BFS(self, nd):
         ## TODO : design your data structure here for your algorithm
@@ -116,8 +126,20 @@ class Maze:
     def getAction(self, car_dir, nd_from, nd_to):
         # TODO : get the car action
         # Tips : return an action and the next direction of the car
-        return None
-
+        '''
+        car_dir : An int.(Please look up Direction class in node.py for more info.)
+        nd_from, nd_to : An int that represents the index of the node.
+        return a tuple (action,dir_at_next_node)
+        '''
+        Dir=self.node(nd_from).getDirection(self.node(nd_to))
+        if Dir == car_dir:
+            return (Action(1),Dir)
+        elif (Dir == 1 and car_dir == 2) or (Dir == 2 and car_dir == 1) or(Dir == 3 and car_dir == 4) or (Dir == 4 and car_dir == 3):
+            return (Action(2),Dir)
+        elif (Dir == 3 and car_dir == 1) or (Dir == 2 and car_dir == 3) or(Dir == 4 and car_dir == 2) or (Dir == 1 and car_dir == 4):
+            return (Action(4),Dir)
+        elif (Dir == 4 and car_dir == 1) or (Dir == 2 and car_dir == 4) or(Dir == 3 and car_dir == 2) or (Dir == 1 and car_dir == 3):
+            return (Action(3),Dir)
     def strategy(self, nd):
         return self.BFS(nd)
 
@@ -131,10 +153,21 @@ if __name__ == '__main__':
     #print(int(MZ.raw_data[0][1]))
     #print(str(np.array(MZ.raw_data)[1][2])=='nan')
     #print(MZ.nodes)
-    node=2
-    route=MZ.BFS(node)
-    while route:
-        print(route)
-        node=route[-1]
-        route=MZ.BFS(node)
+
+    #node=2
+    #route=MZ.BFS(node)
+    #while route:
+    #    print(route)
+    #    node=route[-1]
+    #    route=MZ.BFS(node)
+
     #print(MZ.getStartPoint())
+
+    route=MZ.BFS(1)
+    print(route)
+    index=0
+    Car_dir=NORTH
+    while index != len(route)-1:
+        move,Car_dir=MZ.getAction(Car_dir,route[index],route[index+1])
+        index+=1
+        print(move)
