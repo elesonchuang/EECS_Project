@@ -13,7 +13,7 @@ class Node:
         # store successor as (Node, direction to node, distance)
         self.Successors = []
     def __str__(self):
-        return 'Node%d' % self.index
+        return 'Node %d' % self.index
     def getIndex(self):
         return self.index
 

@@ -105,10 +105,10 @@ class Maze:
         # Tips : return a sequence of nodes of the shortest path
 
         marked=[None] * (len(self.nodes)+1)
-        qu=[nd_from]
+        qu=[nd_from] #bfs queue
         if not (nd_from in self.nodes and nd_to in self.nodes):return None 
         marked[nd_from]='start'
-        while qu:
+        while qu: #do until queue is empty
             s=qu.pop(0)
             for i in self.adj[s]:
                 if marked[i] == None:
@@ -140,6 +140,7 @@ class Maze:
             return (Action(4),Dir)
         elif (Dir == 4 and car_dir == 1) or (Dir == 2 and car_dir == 4) or(Dir == 3 and car_dir == 2) or (Dir == 1 and car_dir == 3):
             return (Action(3),Dir)
+            
     def strategy(self, nd):
         return self.BFS(nd)
 
@@ -154,15 +155,21 @@ if __name__ == '__main__':
     #print(str(np.array(MZ.raw_data)[1][2])=='nan')
     #print(MZ.nodes)
 
-    #node=2
-    #route=MZ.BFS(node)
-    #while route:
-    #    print(route)
-    #    node=route[-1]
-    #    route=MZ.BFS(node)
-
+    node=2
+    route=MZ.BFS(node)
+    total_route=[node]
+    direction=EAST
+    while route:
+        print(route)
+        total_route+=route[1:]
+        node=route[-1]
+        route=MZ.BFS(node)
+    print(total_route)
+    for i in range(0,len(total_route)-1):
+        action,direction=MZ.getAction(direction,total_route[i],total_route[i+1])
+        print(action)
     #print(MZ.getStartPoint())
-
+    '''
     route=MZ.BFS(1)
     print(route)
     index=0
@@ -171,3 +178,4 @@ if __name__ == '__main__':
         move,Car_dir=MZ.getAction(Car_dir,route[index],route[index+1])
         index+=1
         print(move)
+'''
