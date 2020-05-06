@@ -35,8 +35,7 @@ def main():
             action,direction=maze.getAction(direction,total_route[i],total_route[i+1])
             print(action)
             interf.send_action(action)
-            print(interf.get_UID())
-
+            
     elif (sys.argv[1] == '1'):
         print("Mode 1: for treasure-hunting with rule 2")
         # TODO : for treasure-hunting with rule 2, which requires you to hunt as many specified treasures as possible
