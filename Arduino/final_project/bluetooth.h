@@ -56,7 +56,7 @@ BT_CMD ask_BT(){
 // (but need to convert to byte type)
 void send_msg(const char& msg)
 {if (digitalRead(l1) == HIGH&& digitalRead(l2) == HIGH &&digitalRead(l3) == HIGH &&  digitalRead(r1) == HIGH &&digitalRead(r2) == HIGH && digitalRead(r3) == HIGH){ 
- BT.write("H")；}
+ BT.write('H')；}
          
               
 }// send_msg
