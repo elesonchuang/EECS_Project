@@ -24,6 +24,17 @@ class interface:
 
     def send_action(self,dirc):
         # TODO : send the action to car
+        if (dirc == ADVANCE):
+            self.ser.SerialWrite('f')
+        elif(dirc == U_TURN): 
+            self.ser.SerialWrite('b')
+        elif(dirc == TURN_RIGHT):
+            self.ser.SerialWrite('r')
+        elif(dirc == TURN_LEFT):
+            self.ser.SerialWrite('l')
+        elif(dirc == HALT):
+            self.ser.SerialWrite('s')
+
         return
 
     def end_process(self):

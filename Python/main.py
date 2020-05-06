@@ -20,6 +20,8 @@ def main():
 
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting with rule 1")
+        route = maze.BFS(1)
+        print(route)
         # TODO : for treasure-hunting with rule 1, which encourages you to hunt as many scores as possible
         
 
