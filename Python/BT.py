@@ -48,4 +48,7 @@ class bluetooth:
         else:
             return 0
 
+bt = bluetooth()
+print(bt.SerialReadString)
+
 
