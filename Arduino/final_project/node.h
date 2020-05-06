@@ -16,3 +16,22 @@ int extern _Tp;
 
 // TODO: add some function to control your car when encounter a node
 // here are something you can try: left_turn, right_turn... etc.
+ stop_motion(){
+  MotorWriting(0,0)
+ }
+ go_foward(){
+  MotorWriting(100,100)
+ }
+ back_up(){
+  MotorWriting(-100,-100)
+   }
+ left_turn(){
+  MotorWriting(100,-100)；
+  delay(750)；
+ }
+ right_turn(){
+  MotorWriting(-100,100)；
+  delay(750)；
+ }
+ 
+      

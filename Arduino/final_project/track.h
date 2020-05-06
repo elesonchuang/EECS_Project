@@ -18,11 +18,69 @@ int extern _Tp;
 /*===========================import variable===========================*/
 
 // Write the voltage to motor.
-void MotorWriting(double vL, double vR) {
-  // TODO: use L298N to control motor voltage & direction
-}// MotorWriting
-
-// P/PID control Tracking
-void tracking(int l1,int l2,int l3,int r3,int r2,int r1){
-  //TODO: complete your P/PID tracking code
-}// tracking
+void MotorWriting(double vR, double vL){
+  if (vR >= 0){
+    analogWrite(ENA, vR);
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+  }
+  else if (vR < 0){
+    analogWrite(ENA, -vR);
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+  }
+  if (vL >= 0){
+    analogWrite(ENB, vL);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+  }
+  else if (vL < 0){
+    analogWrite(ENB, -vL);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+  }
+}
+while(BT.available() == 0){
+            //IR module
+            double ave_error = 0;
+            double e[6] = {800, 800, 800, 800, 800, 800};
+            int cnt = 0;
+            if (digitalRead(l1) == HIGH) e[0] = 1;
+            if (digitalRead(l2) == HIGH) e[1] = 0.5;
+            if (digitalRead(l3) == HIGH) e[2] = 0; 
+            if (digitalRead(r1) == HIGH) e[5] = -1;
+            if (digitalRead(r2) == HIGH) e[4] = -0.5;
+            if (digitalRead(r3) == HIGH) e[3] = 0; 
+            for(int i = 0; i < 6; i++){
+              if (e[i] < 800){
+                cnt++;
+                ave_error += e[i];
+              }
+            }
+            
+            if(cnt == 0){
+              ave_error = 0;
+            }
+            else{
+              ave_error /= cnt;
+            }
+            if (cnt == 0){
+              MotorWriting(-100, -100);//back the car when it is off the track
+            }
+            else if (ave_error >= 0.75){
+              MotorWriting(130, -90);//big left spin
+            }
+            else if (ave_error <= -0.75){
+              MotorWriting(-90, 130);//big right spin 
+            }
+            else if (ave_error >= 0.5){
+              MotorWriting(115, -90);//small left spin 
+            }
+            else if (ave_error <= -0.5){
+              MotorWriting(-90, 115);// small right spin 
+            }
+            else{
+              MotorWriting(120, 100);// go forward
+            }
+          }
+          

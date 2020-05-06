@@ -36,7 +36,22 @@ SoftwareSerial BT(A0,A1);   // TX,RX on bluetooth module, 請按照自己車上�
 #define SS_PIN       10       // 晶片選擇腳位
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================define pin & create module object===========================*/
-
+SoftwareSerial BT (2, 3);
+int tx = 3;
+int rx = 2;
+int ENA = 6;
+int ENB = 5;
+int IN1 = 8;
+int IN2 = 7;
+int IN3 = 9;
+int IN4 = 4;
+//IR module
+int L1 = 18;
+int L2 = 19;
+int L3 = 14;
+int R3 = 15;
+int R2 = 16;
+int R1 = 17;
 /*===========================declare function prototypes===========================*/
 // search graph
 void Search_Mode();
@@ -56,19 +71,24 @@ void setup()
    SPI.begin();
    mfrc522.PCD_Init();
    //L298N pin
-   pinMode(MotorR_I1,   OUTPUT);
-   pinMode(MotorR_I2,   OUTPUT);
-   pinMode(MotorL_I3,   OUTPUT);
-   pinMode(MotorL_I4,   OUTPUT);
-   pinMode(MotorL_PWML, OUTPUT);
-   pinMode(MotorR_PWMR, OUTPUT);
-   //tracking pin
-   pinMode(R1, INPUT); 
-   pinMode(R2, INPUT);
-   pinMode(R3, INPUT);
-   pinMode(L1, INPUT);
-   pinMode(L2, INPUT);
-   pinMode(L3, INPUT);
+  void setup () {
+  Serial.begin (9600);
+  BT.begin(9600);
+  //motor module
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  //IR module
+  pinMode( L1, INPUT);
+  pinMode( L2, INPUT);
+  pinMode( L3, INPUT);
+  pinMode( R3, INPUT);
+  pinMode( R2, INPUT);
+  pinMode( R1, INPUT);
+}
 #ifdef DEBUG
   Serial.println("Start!");
 #endif
@@ -82,7 +102,7 @@ void setup()
 
 // initalize parameter
 // variables for 循線模組
-int r2=0,r1=0,r3=0,l3=0,l1=0,l2=0;
+int R2=0,R1=0,R3=0,L3=0,L1=0,L2=0;
 // variable for motor power
 int _Tp=90;
 // enum for car states, 不懂得可以自己google C++ enum
@@ -93,7 +113,7 @@ enum ControlState
 };
 ControlState _state=HAULT_STATE;
 // enum for bluetooth message, reference in bluetooth.h line 2
-BT_CMD _cmd = NOTHING;
+//BT_CMD _cmd = NOTHING;
 
 void loop()
 {
@@ -104,15 +124,22 @@ void loop()
    SetState();
 }// loop
 
-void SetState()
-{
+void SetState(){
+
   // TODO:
   // 1. Get command from bluetooth 
   // 2. Change state if need
+  if (BT.read=="s"){
+    Hault_Mode
+  }else {Search_Mode;
+  
+     
+  }
+  
 }// SetState
 
 void Hault_Mode()
-{
+{Motorwriting(0,0);
   // TODO: let your car stay still
 }// Hault_Mode
 
