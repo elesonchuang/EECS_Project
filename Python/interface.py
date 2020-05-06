@@ -3,7 +3,7 @@ import maze
 import score
 
 # hint: You may design additional functions to execute the input command, which will be helpful when debugging :)
-
+    
 class interface:
     def __init__(self):
         print("")
@@ -23,6 +23,11 @@ class interface:
         return self.ser.SerialReadByte()
 
     def send_action(self,dirc):
+        ADVANCE = 1
+        U_TURN = 2
+        TURN_RIGHT = 3
+        TURN_LEFT = 4
+        HALT = 5
         # TODO : send the action to car
         if (dirc == ADVANCE):
             self.ser.SerialWrite('f')
