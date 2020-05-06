@@ -16,21 +16,21 @@
 
 /*===========================define pin & create module object================================*/
 // BlueTooth
-SoftwareSerial BT(A0,A1);   // TX,RX on bluetooth module, 請按照自己車上的接線寫入腳位
+SoftwareSerial BT(2,3);   // TX,RX on bluetooth module, 請按照自己車上的接線寫入腳位
 // L298N, 請按照自己車上的接線寫入腳位(左右不一定要跟註解寫的一樣)
-#define MotorR_I1     A2 //定義 I1 接腳（右）
-#define MotorR_I2     A3 //定義 I2 接腳（右）
-#define MotorL_I3     A4 //定義 I3 接腳（左）
-#define MotorL_I4     A5 //定義 I4 接腳（左）
+#define MotorR_I1     8 //定義 I1 接腳（右）
+#define MotorR_I2     7 //定義 I2 接腳（右）
+#define MotorL_I3     9 //定義 I3 接腳（左）
+#define MotorL_I4     4 //定義 I4 接腳（左）
 #define MotorL_PWML    6 //定義 ENA (PWM調速) 接腳
 #define MotorR_PWMR    5 //定義 ENB (PWM調速) 接腳
 // 循線模組, 請按照自己車上的接線寫入腳位
-#define L1   9  // Define Left Most Sensor Pin
-#define L2   8  // Define Left Middle Sensor Pin
-#define L3   7  // Define Middle Left Sensor Pin
-#define R3   4  // Define Middle Right Sensor Pin
-#define R2   3  // Define Right Middle Sensor Pin
-#define R1   2  // Define Right Most Sensor Pin
+#define L1   18  // Define Left Most Sensor Pin
+#define L2   19  // Define Left Middle Sensor Pin
+#define L3   14  // Define Middle Left Sensor Pin
+#define R3   15  // Define Middle Right Sensor Pin
+#define R2   16  // Define Right Middle Sensor Pin
+#define R1   17  // Define Right Most Sensor Pin
 // RFID, 請按照自己車上的接線寫入腳位
 #define RST_PIN      0        // 讀卡機的重置腳位
 #define SS_PIN       10       // 晶片選擇腳位
@@ -129,11 +129,10 @@ void SetState(){
   // TODO:
   // 1. Get command from bluetooth 
   // 2. Change state if need
-  if (BT.read=="s"){
-    Hault_Mode
-  }else {Search_Mode;
-  
-     
+  if (digitalRead(l1) == HIGH&& digitalRead(l2) == HIGH &&digitalRead(l3) == HIGH &&  digitalRead(r1) == HIGH &&digitalRead(r2) == HIGH && digitalRead(r3) == HIGH){
+    Hault_Mode();
+    delay(500);
+    SEARCH_Mode();     
   }
   
 }// SetState
@@ -146,5 +145,23 @@ void Hault_Mode()
 void Search_Mode()
 {
   // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
+  while(BT.available()){
+      incomingbyte = BT.read();
+      //Serial.print(incomingbyte);
+      if (incomingbyte == 'F'){
+          MotorWriting(150, 150);
+      }
+      if (incomingbyte == 'L'){
+         MotorWriting(150, 100);
+      }
+      if (incomingbyte == 'B'){
+         MotorWriting(-100, -100);
+      }
+      if (incomingbyte == 'R'){
+         MotorWriting(100, 150);
+      }
+      if (incomingbyte == 'S'){
+        MotorWriting(0, 0);//stop the car
+      }
 }// Search_Mode
 /*===========================define function===========================*/
