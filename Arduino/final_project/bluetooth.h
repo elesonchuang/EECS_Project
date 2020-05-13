@@ -19,24 +19,24 @@
   right_turn
 };*/
 
-BT_CMD ask_BT(){
-    BT_CMD message=NOTHING;
+void ask_BT(){
     char cmd;
     if(BT.available()){
       // TODO:
       // 1. get cmd from SoftwareSerial object: BT
       // 2. link bluetooth message to your own command type
-       cmd = BT.read()
+       cmd = BT.read();
        if (cmd == 'f'){
-           MotorWriting(150, 150);      }
+           MotorWriting(150, 150);      
+           }
       if (cmd == 'l'){
         MotorWriting(150, 100);
       }
       if (cmd == 'b'){
-      MotorWriting(-100, -100)
+      MotorWriting(-100, -100);
       }
       if (incomingbyte == 'r'){
-      MotorWriting(100, 150)
+      MotorWriting(100, 150);
       }
       if (cmd == 's'){
        MotorWriting(0, 0);
@@ -54,10 +54,12 @@ BT_CMD ask_BT(){
 // send msg back through SoftwareSerial object: BT
 // can use send_byte alternatively to send msg back
 // (but need to convert to byte type)
+
 void send_msg(const char& msg)
 {if (digitalRead(l1) == HIGH)&& digitalRead(l2) == HIGH) &&digitalRead(l3) == HIGH)&&  digitalRead(r1) == HIGH)&&digitalRead(r2) == HIGH)&& digitalRead(r3) == HIGH)){ 
- BT.write("encounter_a_node");
+ BT.write('H');
  }
+
          
               
 }// send_msg

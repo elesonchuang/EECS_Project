@@ -15,36 +15,34 @@
 
 /*===========================import variable===========================*/
 int extern _Tp;
+int extern r1, l1, r2, l2, r3, l3;
 /*===========================import variable===========================*/
 
 // Write the voltage to motor.
 void MotorWriting(double vR, double vL){
   if (vR >= 0){
-    analogWrite(ENA, vR);
-    digitalWrite(IN1, HIGH);
-    digitalWrite(IN2, LOW);
+    analogWrite(MotorL_ENA, vR);
+    digitalWrite(MotorR_I1, HIGH);
+    digitalWrite(MotorR_I2, LOW);
   }
   else if (vR < 0){
-    analogWrite(ENA, -vR);
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, HIGH);
+    analogWrite(MotorL_ENA, -vR);
+    digitalWrite(MotorR_I1, LOW);
+    digitalWrite(MotorR_I2, HIGH);
   }
   if (vL >= 0){
-    analogWrite(ENB, vL);
-    digitalWrite(IN3, HIGH);
-    digitalWrite(IN4, LOW);
+    analogWrite(MotorR_ENB, vL);
+    digitalWrite(MotorL_I3, HIGH);
+    digitalWrite(MotorL_I4, LOW);
   }
   else if (vL < 0){
-    analogWrite(ENB, -vL);
-    digitalWrite(IN3, LOW);
-    digitalWrite(IN4, HIGH);
+    analogWrite(MotorR_ENB, -vL);
+    digitalWrite(MotorL_I3, LOW);
+    digitalWrite(MotorL_I4, HIGH);
   }
 }
-double ave_error(){
-  double tmp = 0;
-  double e[6] = {800, 800, 800, 800, 800, 800};
-  int cnt = 0;
-}
+
+
 bool all_high(){
   if (digitalRead(l1) == HIGH && digitalRead(l2) == HIGH && digitalRead(l3) == HIGH && digitalRead(r1) == HIGH && digitalRead(r2) == HIGH && digitalRead(r3) == HIGH){
     return true;
@@ -90,6 +88,9 @@ void tracking(){
             }
             if (cnt == 0){
               MotorWriting(-100, -100);//back the car when it is off the track
+            }
+            else if (all_high()){
+              MotorWriting(0, 0);
             }
             else if (ave_error >= 0.75){
               MotorWriting(130, -90);//big left spin
