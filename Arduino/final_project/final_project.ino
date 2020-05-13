@@ -22,8 +22,8 @@ SoftwareSerial BT(A0,A1);   // TX,RX on bluetooth module, 請按照自己車上�
 #define MotorR_I2     A3 //定義 I2 接腳（右）
 #define MotorL_I3     A4 //定義 I3 接腳（左）
 #define MotorL_I4     A5 //定義 I4 接腳（左）
-#define MotorL_PWML    6 //定義 ENA (PWM調速) 接腳
-#define MotorR_PWMR    5 //定義 ENB (PWM調速) 接腳
+#define ENA    6 //定義 ENA (PWM調速) 接腳
+#define ENB    5 //定義 ENB (PWM調速) 接腳
 // 循線模組, 請按照自己車上的接線寫入腳位
 #define L1   9  // Define Left Most Sensor Pin
 #define L2   8  // Define Left Middle Sensor Pin
@@ -40,7 +40,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================declare function prototypes===========================*/
 // search graph
 void Search_Mode();
-// wait for command
+// wait for command 
 void Hault_Mode();
 void SetState();
 /*===========================declare function prototypes===========================*/
@@ -60,8 +60,8 @@ void setup()
    pinMode(MotorR_I2,   OUTPUT);
    pinMode(MotorL_I3,   OUTPUT);
    pinMode(MotorL_I4,   OUTPUT);
-   pinMode(MotorL_PWML, OUTPUT);
-   pinMode(MotorR_PWMR, OUTPUT);
+   pinMode(ENA, OUTPUT);
+   pinMode(ENB, OUTPUT);
    //tracking pin
    pinMode(R1, INPUT); 
    pinMode(R2, INPUT);
@@ -130,18 +130,33 @@ void Search_Mode()
 {
   // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
       if (incomingbyte == 'f'){
-          MotorWriting(150, 150);
+          tracking();
       }
       if (incomingbyte == 'l'){
-         MotorWriting(150, 100);
+         if (all_high()){
+           while (!at_center()){
+             MotorWriting(100, -100);
+           }
+         }
+         tracking();
       }
       if (incomingbyte == 'b'){
-         MotorWriting(-100, -100);
+         if (all_high()){
+           while (!at_center()){
+             MotorWriting(100, -100);
+           }
+         }
+         tracking();
       }
       if (incomingbyte == 'r'){
-         MotorWriting(100, 150);
-         delay(1000);
-         MotorWriting(150, 150);
+         if (all_high()){
+           while (!at_center()){
+             MotorWriting(-100, 100);
+           }
+         }
+         tracking();
       }
+      if (incomingbyte == 's'){
+        MotorWriting(0, 0);
 }// Search_Mode
 /*===========================define function===========================*/

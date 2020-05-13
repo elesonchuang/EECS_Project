@@ -40,7 +40,31 @@ void MotorWriting(double vR, double vL){
     digitalWrite(IN4, HIGH);
   }
 }
-while(BT.available() == 0){
+double ave_error(){
+  double tmp = 0;
+  double e[6] = {800, 800, 800, 800, 800, 800};
+  int cnt = 0;
+}
+bool all_high(){
+  if (digitalRead(l1) == HIGH && digitalRead(l2) == HIGH && digitalRead(l3) == HIGH && digitalRead(r1) == HIGH && digitalRead(r2) == HIGH && digitalRead(r3) == HIGH){
+    return true;
+  }
+  else return false;
+}
+bool all_low(){
+  if (digitalRead(l1) != HIGH && digitalRead(l2) != HIGH && digitalRead(l3) != HIGH && digitalRead(r1) != HIGH && digitalRead(r2) != HIGH && digitalRead(r3) != HIGH){
+    return true;
+  }
+  else return false;
+}
+bool at_center(){
+  if (digitalRead(l1) == LOW && digitalRead(l2) == LOW && digitalRead(r1) == LOW && digitalRead(r2) == LOW && (digitalRead(r3) == HIGH or digitalRead(l3) == HIGH)){
+    return true;
+  }
+  else return false;
+}
+void tracking(){
+  while(BT.available() == 0){
             //IR module
             double ave_error = 0;
             double e[6] = {800, 800, 800, 800, 800, 800};
@@ -83,4 +107,6 @@ while(BT.available() == 0){
               MotorWriting(120, 100);// go forward
             }
           }
+}
+
           

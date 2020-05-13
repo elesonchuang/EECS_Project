@@ -4,6 +4,7 @@ import score
 import interface
 import time
 
+
 import numpy as np
 import pandas
 import time
@@ -34,7 +35,10 @@ def main():
             action,direction=maze.getAction(direction,total_route[i],total_route[i+1])
             print(action)
             interf.send_action(action)
-            
+            while True:
+                message = interf.get_message()
+                if message != '':
+                    break
     elif (sys.argv[1] == '1'):
         print("Mode 1: for treasure-hunting with rule 2")
         # TODO : for treasure-hunting with rule 2, which requires you to hunt as many specified treasures as possible
