@@ -9,7 +9,7 @@
 #define DEBUG // debug flag
 
 // for BlueTooth
-#include<SoftwareSerial.h>
+#include <SoftwareSerial.h>
 // for RFID
 #include <SPI.h>
 #include <MFRC522.h>
@@ -22,9 +22,8 @@ SoftwareSerial BT(2,3);   // TX,RX on bluetooth module, 請按照自己車上的
 #define MotorR_I2     7 //定義 I2 接腳（右）
 #define MotorL_I3     9 //定義 I3 接腳（左）
 #define MotorL_I4     4 //定義 I4 接腳（左）
-#define MotorL_ENA    6 //定義 ENA (PWM調速) 接腳
-#define MotorR_ENB    5 //定義 ENB (PWM調速) 接腳
-
+#define MotorL_PWML    6 //定義 ENA (PWM調速) 接腳
+#define MotorR_PWMR    5 //定義 ENB (PWM調速) 接腳
 // 循線模組, 請按照自己車上的接線寫入腳位
 #define L1   18  // Define Left Most Sensor Pin
 #define L2   19  // Define Left Middle Sensor Pin
@@ -41,7 +40,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================declare function prototypes===========================*/
 // search graph
 void Search_Mode();
-// wait for command 
+// wait for command
 void Hault_Mode();
 void SetState();
 /*===========================declare function prototypes===========================*/
@@ -61,7 +60,8 @@ void setup()
    pinMode(MotorR_I2,   OUTPUT);
    pinMode(MotorL_I3,   OUTPUT);
    pinMode(MotorL_I4,   OUTPUT);
-
+   pinMode(MotorL_PWML, OUTPUT);
+   pinMode(MotorR_PWMR, OUTPUT);
    //tracking pin
    pinMode(R1, INPUT); 
    pinMode(R2, INPUT);
@@ -82,9 +82,9 @@ void setup()
 
 // initalize parameter
 // variables for 循線模組
-//int r2=0,r1=0,r3=0,l3=0,l1=0,l2=0;
+int r2=0,r1=0,r3=0,l3=0,l1=0,l2=0;
 // variable for motor power
-//int _Tp=255;
+int _Tp=90;
 // enum for car states, 不懂得可以自己google C++ enum
 enum ControlState
 {
@@ -93,72 +93,75 @@ enum ControlState
 };
 ControlState _state=HAULT_STATE;
 // enum for bluetooth message, reference in bluetooth.h line 2
-//BT_CMD _cmd = NOTHING;
+BT_CMD _cmd = NOTHING;
 
-void loop(){
+void loop()
+{
    // search graph
    if(_state == SEARCH_STATE) Search_Mode();
    // wait for command
    else if(_state == HAULT_STATE) Hault_Mode();
    SetState();
+   //debug
+  /* if (_state == 0) Serial.print("current state: HAULT_STATE");
+   else Serial.print("current state: SEARCH_STATE");
+   */
 }// loop
 
 void SetState()
 {
   // TODO:
-  
   // 1. Get command from bluetooth 
   // 2. Change state if need
-
-  if (digitalRead(l1) == HIGH&& digitalRead(l2) == HIGH &&digitalRead(l3) == HIGH &&  digitalRead(r1) == HIGH &&digitalRead(r2) == HIGH && digitalRead(r3) == HIGH){
-    Hault_Mode();
-    delay(500);
-    SEARCH_Mode();     
+  BT_CMD instruction = ask_BT();
+  //Serial.println(instruction);
+  //Serial.println("test");
+  //Serial.println(instruction);
+  if (instruction == ADVANCE){
+    Serial.println("advance");
+    advance();
+    _state = SEARCH_STATE;
+    //Serial.println(1);
   }
-  
+  else if (instruction == U_TURN){
+    u_turn();
+    _state = SEARCH_STATE;
+    //Serial.println(2);
+  }
+  else if (instruction == TURN_RIGHT){
+    right_turn();
+    _state = SEARCH_STATE;
+    //Serial.println(3);
+  }
+  else if (instruction == TURN_LEFT){
+    left_turn();
+    _state = SEARCH_STATE;
+    //Serial.println(4);
+  }
+  else if (instruction == HALT){
+    _state = HAULT_STATE;
+    //Serial.println(5);
+  }
 }// SetState
 
 void Hault_Mode()
 {
   // TODO: let your car stay still
-    MotorWriting(0, 0);//stop the car
+  MotorWriting(0, 0);
 }// Hault_Mode
-char incomingbyte;
 void Search_Mode()
 {
   // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
-  while(BT.available()){
-      incomingbyte = BT.read();
-      //Serial.print(incomingbyte);
-      if (incomingbyte == 'f'){
-          tracking();
-      }
-      if (incomingbyte == 'l'){
-         if (all_high()){
-           while (!at_center()){
-             MotorWriting(100, -100);
-           }
-         }
-         tracking();
-      }
-      if (incomingbyte == 'b'){
-         if (all_high()){
-           while (!at_center()){
-             MotorWriting(100, -100);
-           }
-         }
-         tracking();
-      }
-      if (incomingbyte == 'r'){
-         if (all_high()){
-           while (!at_center()){
-             MotorWriting(-100, 100);
-           }
-         }
-         tracking();
-      }
-      if (incomingbyte == 's'){
-        MotorWriting(0, 0);
+  l1 = digitalRead(L1);
+  l2 = digitalRead(L2);
+  l3 = digitalRead(L3);
+  r1 = digitalRead(R1);
+  r2 = digitalRead(R2);
+  r3 = digitalRead(R3);
+  if (l2 && l3 && r2 && r3){
+    _state = HAULT_STATE;
+    Serial.println('r');
+    send_msg('h');
+  }
 }// Search_Mode
-
 /*===========================define function===========================*/

@@ -21,10 +21,8 @@ class interface:
 
     def get_UID(self):
         return self.ser.SerialReadByte()
-
     def get_message(self):
         return self.ser.SerialReadString()
-        
     def send_action(self,dirc):
         ADVANCE = 1
         U_TURN = 2
@@ -52,4 +50,4 @@ class interface:
 
 if __name__ == '__main__':
     test = interface()
-    
+    print(test.end_process)
