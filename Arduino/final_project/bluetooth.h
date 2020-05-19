@@ -10,14 +10,15 @@
 /*check out what you have learned from week 2*/
 
 #include<SoftwareSerial.h>
-/*enum BT_CMD {
-  NOTHING,
-  stop_motion,
-  go_foward,
-  back_up,
-  left_turn,
-  right_turn
-};*/
+enum BT_CMD {
+  NOTHING = 0,
+  // TODO: add your own command type here
+  ADVANCE = 1,
+  U_TURN = 2,
+  TURN_RIGHT = 3,
+  TURN_LEFT = 4,
+  HALT = 5,
+};
 
 BT_CMD ask_BT(){
     BT_CMD message=NOTHING;
@@ -26,26 +27,28 @@ BT_CMD ask_BT(){
       // TODO:
       // 1. get cmd from SoftwareSerial object: BT
       // 2. link bluetooth message to your own command type
-       cmd = BT.read()
-       if (cmd == 'f'){
-           MotorWriting(150, 150);      }
-      if (cmd == 'l'){
-        MotorWriting(150, 100);
+      cmd = BT.read();
+      if (cmd == 'f'){
+        message = ADVANCE;
       }
-      if (cmd == 'b'){
-      MotorWriting(-100, -100)
+      else if (cmd == 'b'){
+        message = U_TURN;
       }
-      if (incomingbyte == 'r'){
-      MotorWriting(100, 150)
+      else if (cmd == 'r'){
+        message = TURN_RIGHT;
       }
-      if (cmd == 's'){
-       MotorWriting(0, 0);
+      else if (cmd == 'l'){
+        message = TURN_LEFT;
       }
-      
-       
+      else if (cmd == 'h'){
+        message = HALT;
+      }
       #ifdef DEBUG
       Serial.print("cmd : ");
       Serial.println(cmd);
+      Serial.println("dao1");
+      Serial.println(message);
+      Serial.println("dao2");
       #endif
     }
     return message;
@@ -55,10 +58,11 @@ BT_CMD ask_BT(){
 // can use send_byte alternatively to send msg back
 // (but need to convert to byte type)
 void send_msg(const char& msg)
-{if (digitalRead(l1) == HIGH)&& digitalRead(l2) == HIGH) &&digitalRead(l3) == HIGH)&&  digitalRead(r1) == HIGH)&&digitalRead(r2) == HIGH)&& digitalRead(r3) == HIGH)){ 
- BT.write("encounter_a_node")；}
-         
-              
+{
+     // TODO:
+     BT.write(msg);
+     //Serial.println("I successfully sent message: ");
+     Serial.println(msg);
 }// send_msg
 
 // send UID back through SoftwareSerial object: BT

@@ -23,22 +23,38 @@ def main():
         start_node=1
         route=maze.BFS(start_node)
         total_route=[start_node]
-        direction=EAST
         while route:
             #print(route)
             total_route+=route[1:]
             node=route[-1]
             route=maze.BFS(node)
         print(total_route)
+        actions=[]
+        direction=maze.node(total_route[0]).getDirection(maze.node(total_route[1]))
+        #print(direction)
         for i in range(0,len(total_route)-1):
             action,direction=maze.getAction(direction,total_route[i],total_route[i+1])
-            print(action)
-            interf.send_action(action)
-            print(interf.get_UID())
+            actions.append(action)
+        print(actions)
+        step=0
+        print('start')
+        interf.send_action(actions[step])
+        print(actions[step])
+        while True:
+            if interf.get_message():
+                print('node encounter')
+                step+=1
+                interf.send_action(actions[step])
+                print(actions[step])
+            if interf.get_UID() :print(interf.get_UID()) 
+            if step==len(actions)-1:break
+            
+        print('end')
 
     elif (sys.argv[1] == '1'):
         print("Mode 1: for treasure-hunting with rule 2")
         # TODO : for treasure-hunting with rule 2, which requires you to hunt as many specified treasures as possible
+
 
         
     elif (sys.argv[1] == '2'):
