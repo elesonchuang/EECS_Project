@@ -49,12 +49,12 @@ void tracking(int l1,int l2,int l3,int r3,int r2,int r1){
     double ave_error = 0;
     double e[6] = {800, 800, 800, 800, 800, 800};
     int cnt = 0;
-    if (digitalRead(l1) == HIGH) e[0] = 1;
-    if (digitalRead(l2) == HIGH) e[1] = 0.5;
-    if (digitalRead(l3) == HIGH) e[2] = 0; 
-    if (digitalRead(r1) == HIGH) e[5] = -1;
-    if (digitalRead(r2) == HIGH) e[4] = -0.5;
-    if (digitalRead(r3) == HIGH) e[3] = 0; 
+    if (l1 == HIGH) e[0] = 1;
+    if (l2 == HIGH) e[1] = 0.5;
+    if (l3 == HIGH) e[2] = 0; 
+    if (r1 == HIGH) e[5] = -1;
+    if (r2 == HIGH) e[4] = -0.5;
+    if (r3 == HIGH) e[3] = 0; 
     for(int i = 0; i < 6; i++){
       if (e[i] < 800){
         cnt++;
@@ -74,19 +74,19 @@ void tracking(int l1,int l2,int l3,int r3,int r2,int r1){
     }
     */
     if (ave_error >= 0.75){
-      MotorWriting(-110, 110);//big left spin
+      MotorWriting(-100, 110);//big left spin
     }
     else if (ave_error <= -0.75){
-      MotorWriting(110, -110);//big right spin 
+      MotorWriting(110, -100);//big right spin 
     }
     else if (ave_error >= 0.5){
-      MotorWriting(-90, 90);//small left spin 
+      MotorWriting(100, 120);//small left spin 
     }
     else if (ave_error <= -0.5){
-      MotorWriting(90, -90);// small right spin 
+      MotorWriting(120, 100);// small right spin 
     }
     else{
-      MotorWriting(90, 90);// go forward
+      MotorWriting(120, 120);// go forward
     }
   
 }// tracking
