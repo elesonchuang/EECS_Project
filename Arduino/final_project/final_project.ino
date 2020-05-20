@@ -98,7 +98,10 @@ BT_CMD _cmd = NOTHING;
 void loop()
 {
    // search graph
-   if(_state == SEARCH_STATE) Search_Mode();
+   if(_state == SEARCH_STATE){
+    Search_Mode();
+    
+   }
    // wait for command
    else if(_state == HAULT_STATE) Hault_Mode();
    SetState();
@@ -115,6 +118,7 @@ void SetState()
   // 1. Get command from bluetooth 
   // 2. Change state if need
   BT_CMD instruction = ask_BT();
+  //if (instruction == 0) instruction = ADVANCE;
   //Serial.println(instruction);
   //Serial.println("test");
   //Serial.println(instruction);
@@ -126,16 +130,22 @@ void SetState()
   }
   else if (instruction == U_TURN){
     u_turn();
+    MotorWriting(0, 0);
+    delay(1000);
     _state = SEARCH_STATE;
     //Serial.println(2);
   }
   else if (instruction == TURN_RIGHT){
     right_turn();
+    MotorWriting(0, 0);
+    delay(1000);
     _state = SEARCH_STATE;
     //Serial.println(3);
   }
   else if (instruction == TURN_LEFT){
     left_turn();
+    MotorWriting(0, 0);
+    delay(1000);
     _state = SEARCH_STATE;
     //Serial.println(4);
   }
@@ -163,14 +173,24 @@ void Search_Mode()
     _state = HAULT_STATE;
     Serial.println('r');
     send_msg('h');
+  
+  }
+  else {/*
+    
+    l1 = digitalRead(L1);
+    l2 = digitalRead(L2);
+    l3 = digitalRead(L3);
+    r1 = digitalRead(R1);
+    r2 = digitalRead(R2);
+    r3 = digitalRead(R3);*/
+    tracking(l1, l2, l3, r3, r2, r1);
   }
   //rfid
   byte idsize = 0;
-  byte *id = rfid(idsize);
+  byte* id = rfid(idsize);
   if (idsize > 0){
-    for (int i = 0; i< idsize; i++){
-      send_msg(id[i]);
-    }
+    send_byte(id, idsize);
   }
+  
 }// Search_Mode
 /*===========================define function===========================*/

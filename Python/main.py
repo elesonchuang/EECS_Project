@@ -46,7 +46,7 @@ def main():
                 step+=1
                 interf.send_action(actions[step])
                 print(actions[step])
-            if interf.get_UID() :print(interf.get_UID()) 
+            if interf.get_UID() :print(interf.get_UID(),'dao') 
             if step==len(actions)-1:break
             
         print('end')
