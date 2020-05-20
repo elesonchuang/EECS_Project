@@ -102,6 +102,7 @@ void loop()
    // wait for command
    else if(_state == HAULT_STATE) Hault_Mode();
    SetState();
+   
    //debug
   /* if (_state == 0) Serial.print("current state: HAULT_STATE");
    else Serial.print("current state: SEARCH_STATE");
@@ -162,6 +163,14 @@ void Search_Mode()
     _state = HAULT_STATE;
     Serial.println('r');
     send_msg('h');
+  }
+  //rfid
+  byte idsize = 0;
+  byte *id = rfid(idsize);
+  if (idsize > 0){
+    for (int i = 0; i< idsize; i++){
+      send_msg(id[i]);
+    }
   }
 }// Search_Mode
 /*===========================define function===========================*/
