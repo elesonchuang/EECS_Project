@@ -1,4 +1,4 @@
-  /***************************************************************************/
+/***************************************************************************/
 // File			  [track.h]
 // Author		  [Erik Kuo]
 // Synopsis		[Code used for tracking]
@@ -74,19 +74,19 @@ void tracking(int l1,int l2,int l3,int r3,int r2,int r1){
     }
     */
     if (ave_error >= 0.75){
-      MotorWriting(-100, 110);//big left spin
+      MotorWriting( -90, 90);//big left spin
     }
     else if (ave_error <= -0.75){
-      MotorWriting(110, -100);//big right spin 
+      MotorWriting(90, -90);//big right spin 
     }
     else if (ave_error >= 0.5){
-      MotorWriting(100, 120);//small left spin 
+      MotorWriting(-90, 90);//small left spin 
     }
     else if (ave_error <= -0.5){
-      MotorWriting(120, 100);// small right spin 
+      MotorWriting(90, -90);// small right spin 
     }
     else{
-      MotorWriting(120, 120);// go forward
+      MotorWriting(100, 100);// go forward
     }
   
 }// tracking

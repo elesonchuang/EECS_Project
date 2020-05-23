@@ -13,7 +13,7 @@ import os
 
 def main():
     maze = mz.Maze("data/small_maze.csv")
-    point = score.Scoreboard("data/UID.csv", "team_NTUEE", sys.argv[1])
+    point = score.Scoreboard("data/UID.csv", "team_dao", sys.argv[1])
     interf = interface.interface()
     # TODO : Initialize necessary variables
 
@@ -41,12 +41,15 @@ def main():
         interf.send_action(actions[step])
         print(actions[step])
         while True:
-            if interf.get_message():
+            if str(interf.get_message())=='h':
                 print('node encounter')
                 step+=1
                 interf.send_action(actions[step])
                 print(actions[step])
-            if interf.get_UID() :print(interf.get_UID(),'dao') 
+            UID=interf.get_UID()
+            if UID : 
+                uid=str(UID)[2::].upper()
+                point.add_UID(uid)
             if step==len(actions)-1:break
             
         print('end')
@@ -54,7 +57,7 @@ def main():
     elif (sys.argv[1] == '1'):
         print("Mode 1: for treasure-hunting with rule 2")
         # TODO : for treasure-hunting with rule 2, which requires you to hunt as many specified treasures as possible
-        start_node=1
+        start_node=6
         treasures=point.sequence #for testing
         route=maze.BFS_2(start_node,treasures[0])
         total_route=[start_node]
@@ -77,11 +80,18 @@ def main():
         interf.send_action(actions[step])
         print(actions[step])
         while True:
-            if interf.get_message():
+            if interf.get_message()=='h':
                 print('node encounter')
                 step+=1
                 interf.send_action(actions[step])
                 print(actions[step])
+            UID=interf.get_UID()
+            if UID : 
+                uid=str(UID)[2::].upper()
+                while len(uid)<8:
+                    uid='0'+uid
+
+                point.add_UID(uid)
             if step==len(actions)-1:break
             
         print('end')

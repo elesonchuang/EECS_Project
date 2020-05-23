@@ -104,7 +104,9 @@ void loop()
    }
    // wait for command
    else if(_state == HAULT_STATE) Hault_Mode();
+   //Serial.println(_state);
    SetState();
+   
    //debug
   /* if (_state == 0) Serial.print("current state: HAULT_STATE");
    else Serial.print("current state: SEARCH_STATE");
@@ -171,6 +173,20 @@ void Search_Mode()
   if (l2 && l3 && r2 && r3){
     _state = HAULT_STATE;
     Serial.println('r');
+    MotorWriting(0, 0);
+    delay(600);
+    MotorWriting(100, 100);
+    delay(250);
+    while(l2 && l3 && r2 && r3){
+      MotorWriting(100, 100);
+      l1 = digitalRead(L1);
+      l2 = digitalRead(L2);
+      l3 = digitalRead(L3);
+      r1 = digitalRead(R1);
+      r2 = digitalRead(R2);
+      r3 = digitalRead(R3);
+    }
+    
     send_msg('h');
   
   }
@@ -185,12 +201,12 @@ void Search_Mode()
     tracking(l1, l2, l3, r3, r2, r1);
   }
   //rfid
-  byte idsize =0;
+  
+  byte idsize = 0;
   byte* id = rfid(idsize);
   if (idsize > 0){
-    for ( int i = 0; i < idsize; i++){
-      send_msg(id[i]);
-    }
+    send_byte(id, idsize);
+    Serial.println(idsize);
   }
 }// Search_Mode
 /*===========================define function===========================*/

@@ -67,6 +67,7 @@ void send_msg(const char& msg)
 
 // send UID back through SoftwareSerial object: BT
 void send_byte(byte *id, byte& idSize) {
+  BT.write(id[0]);
   for (byte i = 0; i < idSize; i++) {  // Send UID consequently.
     BT.write(id[i]);
   }
