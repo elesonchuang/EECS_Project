@@ -54,6 +54,37 @@ def main():
     elif (sys.argv[1] == '1'):
         print("Mode 1: for treasure-hunting with rule 2")
         # TODO : for treasure-hunting with rule 2, which requires you to hunt as many specified treasures as possible
+        start_node=1
+        treasures=point.sequence #for testing
+        route=maze.BFS_2(start_node,treasures[0])
+        total_route=[start_node]
+        total_route+=route[1:]
+        for i in range(len(treasures)-1):
+            node=treasures[i]
+            next_node=treasures[i+1]
+            route=maze.BFS_2(node,next_node)
+            print('route=',route)
+            total_route+=route[1:]
+        print(total_route)
+        actions=[]
+        direction=maze.node(total_route[0]).getDirection(maze.node(total_route[1]))
+        for i in range(0,len(total_route)-1):
+            action,direction=maze.getAction(direction,total_route[i],total_route[i+1])
+            actions.append(action)
+        print(actions)
+        step=0
+        print('start')
+        interf.send_action(actions[step])
+        print(actions[step])
+        while True:
+            if interf.get_message():
+                print('node encounter')
+                step+=1
+                interf.send_action(actions[step])
+                print(actions[step])
+            if step==len(actions)-1:break
+            
+        print('end')
 
 
         
