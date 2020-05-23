@@ -201,12 +201,13 @@ void Search_Mode()
     tracking(l1, l2, l3, r3, r2, r1);
   }
   //rfid
-  
   byte idsize = 0;
   byte* id = rfid(idsize);
   if (idsize > 0){
     send_byte(id, idsize);
     Serial.println(idsize);
+
   }
+  
 }// Search_Mode
 /*===========================define function===========================*/

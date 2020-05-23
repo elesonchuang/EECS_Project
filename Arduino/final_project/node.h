@@ -18,6 +18,7 @@ int extern _Tp;
 void left_turn(){
   MotorWriting(0, 0);
   delay(1000);
+<<<<<<< HEAD
   MotorWriting(0, 90);
   delay(400);
   while(!(l2 && !r3 && !l3 && !r2 && !r1)){
@@ -29,15 +30,25 @@ void left_turn(){
     r2 = digitalRead(R2);
     r3 = digitalRead(R3);
       Serial.print("left");
+=======
+  while(!(!r1 && !r2 && !r3 && !l3 && (l2 || l1))){
+    MotorWriting(-100, 100);
+>>>>>>> 99ccdf034536c5c2a021ab5f4e67e175df09e2fe
   }
 }
 void right_turn(){
   MotorWriting(0, 0);
+<<<<<<< HEAD
   delay(1000);
   MotorWriting(90, 0);
   delay(400);
   while(!((r1 ||r2) && !r3 && !l3 && !l2 && !l1)){
     MotorWriting(90, 0);
+=======
+  delay(300);
+  while(!((r1 || r2) && !r3 && !l2 && !l2 && !l1)){
+    MotorWriting(100, -90);
+>>>>>>> 99ccdf034536c5c2a021ab5f4e67e175df09e2fe
     l1 = digitalRead(L1);
     l2 = digitalRead(L2);
     l3 = digitalRead(L3);
@@ -49,12 +60,21 @@ void right_turn(){
   Serial.println("exit");
 }
 void u_turn(){
+<<<<<<< HEAD
   MotorWriting(0, 0);
   delay(300);
   MotorWriting(80, -90);
   delay(600);
   while(!(r2 && !r3 && !l2 && !l2 && !l1)){
     MotorWriting(80, -90);
+=======
+  MotorWriting(110, 130);
+  delay(300);
+  MotorWriting(0, 0);
+  delay(300);
+  while(!((r1 || r2) && !r3 && !l2 && !l2 && !l1)){
+    MotorWriting(100, -90);
+>>>>>>> 99ccdf034536c5c2a021ab5f4e67e175df09e2fe
     l1 = digitalRead(L1);
     l2 = digitalRead(L2);
     l3 = digitalRead(L3);
@@ -65,5 +85,9 @@ void u_turn(){
   }
 }
 void advance(){
+<<<<<<< HEAD
   delay(1);
+=======
+  tracking(l1, l2, l3, r3, r2, r1);
+>>>>>>> 99ccdf034536c5c2a021ab5f4e67e175df09e2fe
 }
